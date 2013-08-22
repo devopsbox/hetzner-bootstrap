@@ -25,6 +25,7 @@ module Hetzner
                         wait_for_ssh_up
                         verify_installation
                         copy_ssh_keys
+                        copy_local_files
                         update_local_known_hosts
                         post_install
                         post_install_remote)
