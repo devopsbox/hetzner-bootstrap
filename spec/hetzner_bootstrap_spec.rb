@@ -8,7 +8,7 @@ describe "Bootstrap" do
   end
 
   context "add target" do
-    
+
     it "should be able to add a server to operate on" do
       @bootstrap.add_target proper_target
       @bootstrap.targets.should have(1).target
@@ -25,7 +25,19 @@ describe "Bootstrap" do
       @bootstrap.add_target improper_target_without_template
       }.should raise_error(Hetzner::Bootstrap::Target::NoTemplateProvidedError)
     end
-  
+
+    it "should execute copy for local files" do
+      # options = {
+      #   :template => "SOMETHING",
+      #   :ip      => "XXX.XXX.XXX.XXX",
+      #   :copy_local_files => [
+      #     {:source => "LICENSE", :target => "/tmp/license", :mode => "0600"}
+      #   ]
+      # }
+      # target = Hetzner::Bootstrap::Target.new(options)
+      # target.copy_local_files
+    end
+
   end
 
   def proper_target
