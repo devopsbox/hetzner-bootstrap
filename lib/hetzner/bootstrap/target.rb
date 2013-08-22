@@ -19,6 +19,9 @@ module Hetzner
       attr_accessor :public_keys
       attr_accessor :bootstrap_cmd
       attr_accessor :logger
+      ## array with {:mode, :source, :target} hashes
+      attr_accessor :copy_local_files
+
 
       def initialize(options = {})
         @rescue_os     = 'linux'
@@ -149,6 +152,25 @@ module Hetzner
               ssh.exec!("echo \"#{pub}\" >> /root/.ssh/authorized_keys")
             end
           end
+        end
+      end
+
+      # array with {:mode, :source, :target} hashes
+      def copy_local_files(optons = {})
+        if @copy_local_files
+          @copy_local_files.each do |file|
+            content = File.read(File.expand_path(file[:source]))
+            target  = file[:target]
+            mode    = file[:mode]
+            create_remote_file(content, target, mode)
+          end
+        end
+      end
+
+      def create_remote_file(content, target, mode = nil)
+        remote do |ssh|
+          ssh.exec!("echo \"#{content}\" >> #{target}")
+          ssh.exec!("chmod #{mode} #{target}") if mode
         end
       end
 
